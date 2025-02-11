@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promise Day Animation</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        overflow: hidden;
+        font-family: "Arial", sans-serif;
+      }
+
+      .container {
+        text-align: center;
+        position: relative;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        transform: scale(0);
+        animation: cardAppear 1s forwards;
+      }
+
+      h1 {
+        color: #ff4757;
+        margin-bottom: 1rem;
+      }
+
+      .promise-text {
+        font-size: 1.2rem;
+        color: #2d3436;
+        line-height: 1.5;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: textAppear 1s forwards 0.5s;
+      }
+
+      .hearts {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: #ff6b6b;
+        clip-path: path(
+          "M12 4.419c-2.826-5.695-11.999-4.064-11.999 3.27 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-7.327-9.17-8.972-12-3.27z"
+        );
+        animation: float 4s infinite;
+      }
+
+      @keyframes cardAppear {
+        to {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes textAppear {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .promise-button {
+        margin-top: 2rem;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        background: #ff4757;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .promise-button:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hearts" id="hearts"></div>
+      <div class="card">
+        <h1>❤️ Promise Day ❤️</h1>
+        <p class="promise-text" id="promiseText"></p>
+        <button class="promise-button" onclick="makePromise()">
+          Make a Promise
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const promiseLines = [
+        "I promise to always be there for you,",
+        "to support you in every situation,",
+        "to cherish our moments together,",
+        "and to love you unconditionally.",
+        "You mean the world to me! ❤️",
+      ];
+
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+        heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+        return heart;
+      }
+
+      function explodeHearts() {
+        const heartsContainer = document.getElementById("hearts");
+        for (let i = 0; i < 50; i++) {
+          const heart = createHeart();
+          heartsContainer.appendChild(heart);
+          setTimeout(() => heart.remove(), 4000);
+        }
+      }
+
+      function animateText() {
+        const textElement = document.getElementById("promiseText");
+        let index = 0;
+
+        function addWord() {
+          if (index < promiseLines.length) {
+            const line = document.createElement("div");
+            line.textContent = promiseLines[index];
+            line.style.opacity = "0";
+            line.style.animation = "textAppear 0.5s forwards";
+            textElement.appendChild(line);
+            index++;
+            setTimeout(addWord, 1000);
+          }
+        }
+
+        addWord();
+      }
+
+      function makePromise() {
+        const button = document.querySelector(".promise-button");
+        button.textContent = "Promise Made! ❤️";
+        button.style.backgroundColor = "#2ed573";
+        button.disabled = true;
+        explodeHearts();
+        animateText();
+      }
+
+      // Initial animation
+      setTimeout(() => {
+        document.querySelector(".card").style.transform = "scale(1)";
+      }, 500);
+    </script>
+  </body>
+</html>
